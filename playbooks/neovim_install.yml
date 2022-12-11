@@ -1,0 +1,30 @@
+- hosts: all
+  become: true
+  tasks:
+    - name: Install dependencies
+      apt:
+        name:
+          - build-essential
+          - cmake
+          - libtool
+          - libtool-bin
+          - automake
+          - pkg-config
+          - libncurses5-dev
+          - libncursesw5-dev
+          - libtinfo-dev
+          - libunibilium-dev
+          - libvterm-dev
+        state: present
+
+    - name: Clone Neovim repository
+      git:
+        repo: https://github.com/neovim/neovim.git
+        dest: /tmp/neovim
+        version: stable
+
+    - name: Build and install Neovim
+      shell: |
+        cd /tmp/neovim
+        make CMAKE_BUILD_TYPE=RelWithDebInfo
+        make install

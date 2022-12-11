@@ -1,0 +1,19 @@
+- name: Install and configure SSH server
+  hosts: all
+  become: true
+  tasks:
+    - name: Install openssh-server package
+      apt:
+        name: openssh-server
+        state: present
+
+    - name: Generate SSH key pair
+      shell: ssh-keygen -t rsa -b 4096 -N "" -f /tmp/id_rsa
+      args:
+        creates: /tmp/id_rsa
+
+    - name: Add SSH public key
+      authorized_key:
+        user: "{{ ansible_user }}"
+        state: present
+        key: "{{ lookup('file', '/tmp/id_rsa.pub') }}"

@@ -1,0 +1,7 @@
+- hosts: all
+  become: true
+  tasks:
+    - name: Clone dotfiles
+      command: git clone git@github.com:julian-iaquinandi/dotfiles.git ~/dotfiles
+      args:
+        creates: /usr/share/fzf

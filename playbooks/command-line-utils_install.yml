@@ -1,0 +1,29 @@
+- hosts: all
+  become: true
+  tasks:
+    - name: Install Git from package manager
+      apt:
+        name: git
+        state: present
+
+    - name: Install Ripgrep from package manager
+      apt:
+        name: ripgrep
+        state: present
+
+    - name: Install prerequisites for Fzf
+      apt:
+        name:
+          - build-essential
+          - pkg-config
+        state: present
+
+    - name: Install Fzf from source
+      command: git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf && ~/.fzf/install
+      args:
+        creates: ~/.fzf
+
+    - name: Install Fzf keybindings and completion
+      command: source ~/.bashrc && source /usr/share/fzf/key-bindings.bash && source /usr/share/fzf/completion.bash
+      args:
+        creates: /usr/share/fzf
